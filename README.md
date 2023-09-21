@@ -1,3 +1,15 @@
+# Next Typescript Three.js starter
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/bukotsunikki.svg?style=social&label=Follow%20%40MariusBallot)](https://twitter.com/mariusballot)
+
+A simple starter for no setup quick three.js scenes.
+## Features
+- Typescript
+- GLSLify & .frag/.vert/.glsl
+- Custom MatCap shader setup
+- Singleton classes coding approach
+
+___
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
