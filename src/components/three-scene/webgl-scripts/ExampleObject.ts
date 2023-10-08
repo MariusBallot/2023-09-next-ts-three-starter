@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import dummyFrag from "./shaders/dummyFrag.glsl"
 import dummyVert from "./shaders/dummyVert.glsl"
+import RAF from "@/utils/RAF"
 
 class ExampleObject {
   private scene: THREE.Scene | undefined;
@@ -34,8 +35,8 @@ class ExampleObject {
   }
 
   update() {
-    this.dummy.rotateX(0.01)
-    this.dummy.rotateY(0.005)
+    this.dummy.rotateX(0.001 * RAF.dt)
+    this.dummy.rotateY(0.0005 * RAF.dt)
   }
 
   bind() {

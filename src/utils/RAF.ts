@@ -1,14 +1,14 @@
 class RAF {
   private callbacks: { name: string; callback: () => void }[];
-  private lastTimestamp: number;
-  public dt: number;
+  private requestId: number | undefined;
+  private prevTimestamp: number | undefined;
+  public dt: number = 0;
 
   constructor() {
     this.bind();
     this.callbacks = [];
-    this.lastTimestamp = 0;
-    this.dt = 0;
-    this.render(0);
+    this.render = this.render.bind(this);
+    this.render();
   }
 
   subscribe(name: string, callback: () => void) {
@@ -19,17 +19,22 @@ class RAF {
   }
 
   unsubscribe(name: string) {
-    this.callbacks = this.callbacks.filter(item => item.name !== name);
+    this.callbacks = this.callbacks.filter((item) => item.name !== name);
   }
 
-  render(timestamp: number) {
-    if (!this.lastTimestamp) {
-      this.lastTimestamp = timestamp;
-    }
-    this.dt = timestamp - this.lastTimestamp; // Convert to seconds
-    this.lastTimestamp = timestamp;
+  render(timestamp: number = 0) {
+    if (typeof window !== 'undefined') {
+      if (this.prevTimestamp === undefined) {
+        this.prevTimestamp = timestamp;
+      }
 
-    requestAnimationFrame(this.render.bind(this));
+      // Calculate the frame delta time
+      this.dt = (timestamp - this.prevTimestamp); // Convert to seconds
+      this.prevTimestamp = timestamp;
+
+      this.requestId = window.requestAnimationFrame(this.render);
+    }
+
     this.callbacks.forEach((item) => {
       item.callback();
     });
@@ -39,6 +44,13 @@ class RAF {
     this.subscribe = this.subscribe.bind(this);
     this.unsubscribe = this.unsubscribe.bind(this);
     this.render = this.render.bind(this);
+  }
+
+  stop() {
+    if (typeof window !== 'undefined' && this.requestId !== undefined) {
+      window.cancelAnimationFrame(this.requestId);
+      this.requestId = undefined;
+    }
   }
 }
 
